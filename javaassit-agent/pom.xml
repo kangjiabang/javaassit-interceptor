@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>souche-agent</artifactId>
+        <groupId>souche-agent</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>javaassit-agent</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.1.9</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>souche-agent</groupId>
+            <artifactId>souche-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
+        <!-- only required if structs are used -->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.25.0-GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>15.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keepDependenciesWithProvidedScope>false</keepDependenciesWithProvidedScope>
+                    <promoteTransitiveDependencies>false</promoteTransitiveDependencies>
+                    <createDependencyReducedPom>true</createDependencyReducedPom>
+                    <minimizeJar>false</minimizeJar>
+                    <createSourcesJar>false</createSourcesJar>
+                    <artifactSet>
+                        <includes>
+                            <include>com.github.jsqlparser:jsqlparser</include>
+                            <include>souche-agent:souche-common</include>
+                            <include>org.apache.commons:commons-lang3</include>
+                            <include>commons-collections:commons-collections</include>
+                            <include>org.javassist:javassist</include>
+                            <include>org.slf4j:slf4j-api</include>
+                            <include>ch.qos.logback:logback-classic</include>
+                            <include>ch.qos.logback:logback-core</include>
+                            <include>com.google.guava:guava</include>
+                            <include>com.alibaba:transmittable-thread-local</include>
+                        </includes>
+                    </artifactSet>
+                    <relocations>
+                        <relocation>
+                            <pattern>net.sf.jsqlparser</pattern>
+                            <shadedPattern>com.souche.shaded.jsqlparser</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>javassist</pattern>
+                            <shadedPattern>com.souche.shaded.javassist</shadedPattern>
+                        </relocation>
+
+                        <relocation>
+                            <pattern>org.slf4j</pattern>
+                            <shadedPattern>com.souche.shaded.org.slf4j</shadedPattern>
+                        </relocation>
+
+                        <relocation>
+                            <pattern>com.google.common</pattern>
+                            <shadedPattern>com.souche.shaded.com.google.common</shadedPattern>
+                        </relocation>
+
+                        <relocation>
+                            <pattern>ch.qos.logback.classic</pattern>
+                            <shadedPattern>com.souche.shaded.ch.qos.logback.classic</shadedPattern>
+                        </relocation>
+
+                    </relocations>
+
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+
+                <configuration>
+                    <archive>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
