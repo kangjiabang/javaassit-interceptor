@@ -111,20 +111,18 @@
         在souche-plugins-performace模块resources目录下的servie-plugins.properties 文件中添加如下  
        
         ```
-            HttpClientRequestDefine=com.souche.perf.http.define.HttpClientRequestDefine
-        
+            HttpClientRequestDefine=com.souche.perf.http.define.HttpClientRequestDefine  
         ```
         
        4. 打包
        在 javaassit-interceptor项目的目录下运行
        ```
        mvn clean install -Dmaven.test.skip 
-
        ```
-       进行打包操作, 打包完成后会在souche-dist模块的target目录下面生成souche-agent-dist.zip文件
+         进行打包操作, 打包完成后会在souche-dist模块的target目录下面生成souche-agent-dist.zip文件
        
-       5. 使用javaagent方式运行
-           将打包后的文件souche-agent-dist.zip放入到指定位置，进行解压操作，在需要拦截的项目中启动时，添加 -javaagent=xx目录/souche-agent/agent/javaassit-agent-1.0-SNAPSHOT.jar
+       5. 使用javaagent方式运行  
+           将打包后的文件souche-agent-dist.zip放入到指定位置，进行解压操作，在需要拦截的项目中启动时，添加 -javaagent=xx目录/souche-agent/agent/javaassit-agent-1.0-SNAPSHOT.jar  
        然后项目进行http请求，就会自动添加header "myheader"实现拦截效果
        
        
