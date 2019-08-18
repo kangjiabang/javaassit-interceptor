@@ -61,7 +61,6 @@ public class HttpClientRequestInterceptor extends AgentMethodInterceptor {
                     if (spentTimeInMill != 0 && timeSpent < spentTimeInMill ) {
                         Thread.sleep((spentTimeInMill - timeSpent));
                     }
-
                     return new BeforeMethodResult(true,mockResult.getResponse());
                 }
             }
