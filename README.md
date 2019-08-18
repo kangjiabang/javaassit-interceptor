@@ -9,17 +9,17 @@
      在souche-plugins模块下面新建一个新的模块。比如souche-plugins-performance,创建后将模块名字添加到souche-plugins的pom.xml文件中
      如下所示：
      
-     ``` 
-     <modules>
-                <module>souche-plugins-performance</module>
-            </modules>
-    ```  
+ ``` 
+        <modules>
+           <module>souche-plugins-performance</module>
+        </modules>
+ ```  
     
    2. 创建拦截逻辑    
       1. 实现Define，定义拦截的类和方法  
             比如想要拦截HttpClient的execute方法，并在拦截的对象中获取headers，新增一个新的header，则可以通过如下方式完成。  
             
-              ```
+            ```
               public class HttpClientRequestDefine extends AbstractInterceptorDefine {
               
               
@@ -47,67 +47,74 @@
                       return new String[] {"org.apache.http.client.methods.HttpUriRequest"};
                   }
               
-              }
-            ```
+             }
+        ```  
+        
       2. 实现interceptor，定义拦截的处理逻辑
        
        自定义的拦截器要扩展 AgentMethodInterceptor接口，如下的拦截器实现了在执行http请求时自动添加header 的key="myheader"、value="test"的效果。
-       ```
        
+       ``` 
        @Slf4j
-public class HttpClientRequestInterceptor extends AgentMethodInterceptor {
-
-
-    public static final HttpClientRequestInterceptor instance = new HttpClientRequestInterceptor();
-
-    private  MockService mockService = MockService.getInstance();
-
-    public HttpClientRequestInterceptor() {
-
-    }
-
-    public  static HttpClientRequestInterceptor getInstance() {
-        return instance;
-    }
-
-    /**
-     * 方法执行之前的拦截
-     * @param args
-     * @param instance
-     * @param clazz
-     * @param methodName
-     */
-    @Override
-    public BeforeMethodResult beforeMethod(Object instance, Class clazz, String methodName, Object[] args) {
+        public class HttpClientRequestInterceptor extends AgentMethodInterceptor {
         
-            HttpUriRequest request = (HttpUriRequest)args[0];
-            request.setHeader("myheader","test");
-            return null;
-    }
-
-    /**
-     * 方法执行之后的拦截
-     * @param args
-     * @param instance
-     * @param clazz
-     * @param methodName
-     *
-     * @return Object 返回值
-     */
-    @Override
-    public Object afterMethod(Object instance,Class clazz,String methodName,Object[] args,Object result) {
-
-        return result;
-    }
-
-    @Override
-    public void handleException(Object instance, Class clazz, String methodName, Object[] args, Throwable e) {
-        log.error("fail to execute HttpClientRequestInterceptor interceptor.",e);
-    }
-}
-       ```
+        
+            public static final HttpClientRequestInterceptor instance = new HttpClientRequestInterceptor();
+        
+            private  MockService mockService = MockService.getInstance();
+        
+            public HttpClientRequestInterceptor() {
+        
+            }
+        
+            public  static HttpClientRequestInterceptor getInstance() {
+                return instance;
+            }
+        
+            /**
+             * 方法执行之前的拦截
+             * @param args
+             * @param instance
+             * @param clazz
+             * @param methodName
+             */
+            @Override
+            public BeforeMethodResult beforeMethod(Object instance, Class clazz, String methodName, Object[] args) {
+                
+                    HttpUriRequest request = (HttpUriRequest)args[0];
+                    request.setHeader("myheader","test");
+                    return null;
+            }
+        
+            /**
+             * 方法执行之后的拦截
+             * @param args
+             * @param instance
+             * @param clazz
+             * @param methodName
+             *
+             * @return Object 返回值
+             */
+            @Override
+            public Object afterMethod(Object instance,Class clazz,String methodName,Object[] args,Object result) {
+        
+                return result;
+            }
+        
+            @Override
+            public void handleException(Object instance, Class clazz, String methodName, Object[] args, Throwable e) {
+                log.error("fail to execute HttpClientRequestInterceptor interceptor.",e);
+            }
+        }
+   ```
        3. 将定义的拦截Define配置到properties文件中  
+       在souche-plugins-performace模块resources目录下的servie-plugins.properties 文件中添加如下  
        
-       如下所示：  
+    
+    ```
+        HttpClientRequestDefine=com.souche.perf.http.define.HttpClientRequestDefine
+        
+    ```
+      
        
        
